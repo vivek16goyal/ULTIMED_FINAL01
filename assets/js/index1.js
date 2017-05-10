@@ -36,7 +36,7 @@ var APPType = "$";
 
 //  3)///////*******A to Z Dava [Demo Version Given To Drug Deal] **********************//////////
 var Heading = "ULTIMED";
-var PCODE = "DEM010";
+var PCODE = "dem001";
 var folderPathImg = "file:///storage/sdcard0/" + PCODE + "/";
 var DownloadPath = "file:///storage/sdcard0/";
 var FolderName = PCODE;
@@ -628,7 +628,7 @@ function CheckPartyRegistration(val) {
                                     localStorage.setItem("State", nameSer[9]);
                                     localStorage.setItem("City", nameSer[10]);
                                     localStorage.setItem("Area", nameSer[11]);
-                                    localStorage.setItem("PREPTCODE", nameSer[13]);
+                                    localStorage.setItem("PREPTCODE", nameSer[14]);
                                     //localStorage.setItem("DocName", nameSer[12]);
                                     //localStorage.setItem("DocCode", nameSer[13]);
                                     $("#div-clientCode").popup("close");
@@ -2108,6 +2108,7 @@ function Order_click() {
             localStorage.setItem("FDName", "ORDR");
             localStorage.setItem("VRNOName", "");
             window.location.href = "#Item-Info-Search";
+            fun_AddToCart();
             fun_showCart();
             SetItem_Count();
         } catch (e) {
@@ -2384,8 +2385,9 @@ $(function () {
             autoFocus: true,
             source: function (request, response) {
                 $.ajax({
-                    url: localStorage.getItem("APIURL") + "/Product/GetItemConsumer",
+                    url: localStorage.getItem("APIURL") + "/Product/GetItemConsumer1",
                     data: { Iname: request.term, PCODE: 'ZZZZZZ' },
+                   // data: { Iname: request.term, FdName: localStor },
                     type: "GET",
                     dataType: "json",
                     cache: false,
@@ -2404,7 +2406,8 @@ $(function () {
                                 GNAME: item.GNAme,
                                 Rate: item.Rate,
                                 WRate: item.WRate
-                            };
+                            }
+                          
                             return mydata;
                         }));
                     },
@@ -2434,7 +2437,15 @@ $(function () {
                 localStorage.setItem("IsFromReorder", "");
                 ClearItemInfo();
                 $("#lblRetailrate").text(ui.item.Rate);
-                $("#lblRate").text(ui.item.WRate);
+                var wrate = ui.item.WRate;
+                if (wrate == "0") {
+                    $("#lblRate").text(ui.item.Mrp);
+                    
+                }
+                else {
+                    $("#lblRate").text(ui.item.WRate);
+                  
+                }
                 $("#lblItmCode").text(ui.item.Icode);
                 $("#lblItmMRP").text(ui.item.Mrp);
                 $("#lblItmName").text(ui.item.label);
@@ -3406,7 +3417,7 @@ function ReOrder(VrNo) {
             dataType: 'json',
             processData: true,
             success: function (data) {
-                
+                debugger;
                 Order_click();
                 localStorage.setItem("IsFromReorder", "1");
                 localStorage.setItem("SelectedItemIndex", "");
